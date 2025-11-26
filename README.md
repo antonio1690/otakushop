@@ -1,59 +1,268 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎌 OtakuShop
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plataforma de comercio electrónico especializada en productos de anime y cultura japonesa.
 
-## About Laravel
+## 📋 Descripción
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+OtakuShop es una aplicación web full-stack desarrollada como Proyecto Final del Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Web. La plataforma permite a los usuarios navegar, comprar y gestionar productos relacionados con anime, manga y cultura japonesa.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Características Principales
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Para Clientes
+- 🛍️ Catálogo de productos con filtros avanzados (categoría, franquicia, búsqueda)
+- 🛒 Carrito de compras interactivo
+- 💳 Sistema de checkout y gestión de pedidos
+- 👤 Perfiles de usuario personalizados
+- 📦 Historial de compras
+- ⭐ Productos destacados y sistema de preventas
 
-## Learning Laravel
+### Para Administradores
+- 📊 Dashboard con estadísticas en tiempo real
+- 📦 Gestión completa de productos (CRUD)
+- 🏷️ Gestión de categorías y franquicias
+- 📋 Gestión de pedidos y cambio de estados
+- 👥 Sistema de roles (Admin/Cliente)
+- 🖼️ Subida y gestión de imágenes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🛠️ Tecnologías Utilizadas
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Backend
+- **PHP 8.2+**
+- **Laravel 11** - Framework PHP
+- **MySQL** - Base de datos relacional
+- **Eloquent ORM** - Gestión de base de datos
 
-## Laravel Sponsors
+### Frontend
+- **HTML5**
+- **CSS3**
+- **Bootstrap 5.3** - Framework CSS
+- **JavaScript (ES6+)** - Interactividad
+- **Blade Templates** - Motor de plantillas
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Herramientas
+- **Composer** - Gestor de dependencias PHP
+- **NPM** - Gestor de paquetes JavaScript
+- **Git** - Control de versiones
+- **XAMPP** - Entorno de desarrollo local
 
-### Premium Partners
+## 📦 Requisitos Previos
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL
+- XAMPP/LARAGON (recomendado para desarrollo local)
 
-## Contributing
+## 🚀 Instalación
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Clonar el repositorio
 
-## Code of Conduct
+```bash
+git clone https://github.com/TU-USUARIO/otakushop.git
+cd otakushop
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Instalar dependencias de PHP
 
-## Security Vulnerabilities
+```bash
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Instalar dependencias de JavaScript
 
-## License
+```bash
+npm install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Configurar el archivo .env
+
+```bash
+# Copiar el archivo de ejemplo
+cp .env.example .env
+
+# Generar la clave de la aplicación
+php artisan key:generate
+```
+
+### 5. Configurar la base de datos
+
+Edita el archivo `.env` con tus credenciales:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=otakushop_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 6. Crear la base de datos
+
+Abre phpMyAdmin o tu cliente MySQL y ejecuta:
+
+```sql
+CREATE DATABASE otakushop_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 7. Ejecutar migraciones y seeders
+
+```bash
+# Ejecutar migraciones
+php artisan migrate
+
+# Cargar datos de ejemplo
+php artisan db:seed
+```
+
+### 8. Crear enlace simbólico para imágenes
+
+```bash
+php artisan storage:link
+```
+
+### 9. Compilar assets
+
+```bash
+# Desarrollo
+npm run dev
+
+# Producción
+npm run build
+```
+
+### 10. Iniciar el servidor
+
+```bash
+php artisan serve
+```
+
+Visita: `http://localhost:8000`
+
+## 👤 Usuarios de Prueba
+
+### Administrador
+- **Email:** admin@otakushop.com
+- **Password:** admin123
+
+### Cliente
+- **Email:** cliente@otakushop.com
+- **Password:** cliente123
+
+## 📁 Estructura del Proyecto
+
+```
+otakushop/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Admin/
+│   │   │   │   ├── AdminDashboardController.php
+│   │   │   │   ├── ProductController.php
+│   │   │   │   ├── CategoryController.php
+│   │   │   │   ├── FranchiseController.php
+│   │   │   │   └── OrderController.php
+│   │   │   ├── HomeController.php
+│   │   │   ├── CartController.php
+│   │   │   └── OrderController.php
+│   │   └── Middleware/
+│   │       └── CheckRole.php
+│   └── Models/
+│       ├── User.php
+│       ├── Product.php
+│       ├── Category.php
+│       ├── Franchise.php
+│       ├── Order.php
+│       ├── OrderItem.php
+│       └── CartItem.php
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+│   ├── css/
+│   │   └── custom.css
+│   └── js/
+│       └── app.js
+├── resources/
+│   └── views/
+│       ├── layouts/
+│       │   ├── app.blade.php
+│       │   └── admin.blade.php
+│       ├── admin/
+│       ├── auth/
+│       └── ...
+└── routes/
+    └── web.php
+```
+
+## 🎨 Características de Diseño
+
+- ✅ Diseño responsive (móvil, tablet, desktop)
+- ✅ Animaciones CSS y JavaScript
+- ✅ Gradientes modernos
+- ✅ Efectos hover interactivos
+- ✅ Notificaciones toast
+- ✅ Loading spinners
+- ✅ Validación de formularios en tiempo real
+
+## 📊 Base de Datos
+
+### Tablas Principales
+- **users** - Usuarios del sistema
+- **products** - Productos del catálogo
+- **categories** - Categorías de productos
+- **franchises** - Franquicias de anime
+- **orders** - Pedidos realizados
+- **order_items** - Items de cada pedido
+- **cart_items** - Productos en el carrito
+
+## 🔐 Seguridad
+
+- ✅ Autenticación con Laravel Breeze
+- ✅ Protección CSRF
+- ✅ Middleware de roles
+- ✅ Validación de datos
+- ✅ Hash de contraseñas (bcrypt)
+- ✅ Protección de rutas
+
+## 📝 Funcionalidades Futuras
+
+- [ ] Sistema de reseñas y valoraciones
+- [ ] Pasarela de pago real (Stripe/PayPal)
+- [ ] Sistema de cupones y descuentos
+- [ ] Notificaciones por email
+- [ ] Lista de deseos
+- [ ] Comparador de productos
+- [ ] Sistema de puntos y recompensas
+- [ ] API RESTful
+
+## 👨‍💻 Autor
+
+**Antonio Ciobanu Amaya**
+- Centro: IES Barajas
+- Ciclo: CFGS Desarrollo de Aplicaciones Web
+- Tutora: Evgeniya Vartanova
+- Fecha: Octubre 2025
+
+## 📄 Licencia
+
+Este proyecto es parte de un trabajo académico del CFGS de Desarrollo de Aplicaciones Web.
+
+## 🙏 Agradecimientos
+
+- IES Barajas
+- Evgeniya Vartanova (Tutora)
+- Comunidad de Laravel
+- Bootstrap Team
+
+## 📞 Contacto
+
+Para cualquier consulta sobre el proyecto:
+- GitHub: [@antonio1690](https://github.com/antonio1690)
+- Email: tu-email@ejemplo.com
+
+---
+
+⭐ Si te gusta este proyecto, dale una estrella en GitHub!
+
+Made with ❤️ and ☕ by Antonio Ciobanu Amaya
