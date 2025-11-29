@@ -1,13 +1,90 @@
 /* public/css/custom.css */
 
 /* ============================================
+   VARIABLES DE MODO CLARO Y OSCURO
+   ============================================ */
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-gradient: linear-gradient(135deg, #ffeef8 0%, #fff5e6 50%, #e8f4ff 100%);
+    --text-primary: #2d3436;
+    --text-secondary: #6c757d;
+    --card-bg: #ffffff;
+    --border-color: #e1e8ed;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --particle-opacity: 0.05;
+}
+
+body.dark-mode {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    --text-primary: #f1f5f9;           /* Texto principal - muy claro */
+    --text-secondary: #94a3b8;         /* Texto secundario - gris claro */
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    --shadow: rgba(0, 0, 0, 0.5);
+    --particle-opacity: 0.08;
+}
+
+/* ============================================
+   PARTÍCULAS DE ANIME FLOTANTES
+   ============================================ */
+
+.anime-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0.3;
+    animation: float-particle 15s infinite ease-in-out;
+}
+
+@keyframes float-particle {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 14s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 16s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 13s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 15s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 17s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 14s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 16s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 13s; }
+
+/* ============================================
    ANIMACIONES
    ============================================ */
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
     }
     to {
         opacity: 1;
@@ -16,33 +93,19 @@
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 @keyframes shake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-5px);
-    }
-    20%, 40%, 60%, 80% {
-        transform: translateX(5px);
-    }
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
 @keyframes slideInRight {
@@ -57,14 +120,41 @@
 }
 
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--primary-color),
+                    0 0 10px var(--primary-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--primary-color),
+                    0 0 30px var(--primary-color),
+                    0 0 40px var(--primary-color);
+    }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
         transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
     }
 }
 
@@ -89,12 +179,313 @@
     animation: bounce 1s;
 }
 
+.rotate {
+    animation: rotate 2s linear infinite;
+}
+
+.glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   MODO OSCURO - ESTILOS GENERALES
+   ============================================ */
+
+body.dark-mode {
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+}
+
+/* Cards y fondos */
+body.dark-mode .card {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: 0 5px 15px var(--shadow);
+    color: var(--text-primary);
+}
+
+body.dark-mode .product-card .card-body {
+    color: var(--text-primary);
+}
+
+/* Formularios */
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--primary-color);
+}
+
+body.dark-mode .form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Labels y textos de formularios */
+body.dark-mode .form-label {
+    color: var(--text-primary);
+}
+
+/* Tablas */
+body.dark-mode .table {
+    color: var(--text-primary);
+}
+
+body.dark-mode .table thead th {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .table tbody tr {
+    color: var(--text-primary);
+}
+
+body.dark-mode .table tbody tr:hover {
+    background: rgba(255, 107, 157, 0.1);
+}
+
+/* Textos auxiliares */
+body.dark-mode .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+body.dark-mode .text-dark {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .bg-light {
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Títulos */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: var(--text-primary);
+}
+
+/* Párrafos */
+body.dark-mode p {
+    color: var(--text-primary);
+}
+
+/* Links */
+body.dark-mode a:not(.btn):not(.nav-link):not(.dropdown-item) {
+    color: #6ea8fe;
+}
+
+body.dark-mode a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
+    color: #9ec5fe;
+}
+
+/* Breadcrumbs */
+body.dark-mode .breadcrumb {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .breadcrumb-item {
+    color: var(--text-primary);
+}
+
+body.dark-mode .breadcrumb-item.active {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--text-secondary);
+}
+
+/* Badges en modo oscuro */
+body.dark-mode .badge.bg-light {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color);
+}
+
+/* Dropdown menus */
+body.dark-mode .dropdown-menu {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .dropdown-item {
+    color: var(--text-primary);
+}
+
+body.dark-mode .dropdown-item:hover {
+    background: rgba(255, 107, 157, 0.2);
+    color: white;
+}
+
+body.dark-mode .dropdown-divider {
+    border-color: var(--border-color);
+}
+
+/* Hero section en modo oscuro */
+body.dark-mode .hero-section {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d1b4e 100%);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* Footer ya es oscuro, pero ajustamos */
+body.dark-mode .footer {
+    background: linear-gradient(135deg, #0a0e27 0%, #16213e 100%);
+}
+
+/* Alerts en modo oscuro */
+body.dark-mode .alert {
+    color: white;
+}
+
+/* Input groups */
+body.dark-mode .input-group-text {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Listados */
+body.dark-mode .list-group-item {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Paginación */
+body.dark-mode .pagination .page-link {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .pagination .page-link:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .pagination .page-item.active .page-link {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Modals */
+body.dark-mode .modal-content {
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+body.dark-mode .modal-header {
+    border-color: var(--border-color);
+}
+
+body.dark-mode .modal-footer {
+    border-color: var(--border-color);
+}
+
+body.dark-mode .btn-close {
+    filter: invert(1);
+}
+
+/* Características (iconos con texto) */
+body.dark-mode .card-title {
+    color: var(--text-primary);
+}
+
+/* Precio de productos */
+body.dark-mode .product-card .h5 {
+    color: var(--primary-color) !important;
+}
+
+/* Asegurar que los nombres de productos se vean */
+body.dark-mode .product-card h6 {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .product-card .card-title {
+    color: var(--text-primary) !important;
+}
+
+/* Small text */
+body.dark-mode small {
+    color: var(--text-secondary);
+}
+
+/* Caracteres japoneses de fondo - más visibles en oscuro */
+body.dark-mode .japanese-bg-text {
+    opacity: 0.08 !important;
+}
+/* Mejoras específicas de contraste */
+body.dark-mode .card h5,
+body.dark-mode .card h6 {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .fw-bold {
+    color: var(--text-primary);
+}
+
+body.dark-mode .fw-semibold {
+    color: var(--text-primary);
+}
+
+/* Asegurar que el precio siempre se vea */
+body.dark-mode [style*="color: var(--primary-color)"] {
+    color: #ff6b9d !important;
+}
+
+/* Badges con mejor contraste */
+body.dark-mode .badge {
+    font-weight: 600;
+}
+
+body.dark-mode .badge.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+}
+
+body.dark-mode .badge.bg-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+    color: white !important;
+}
+
+body.dark-mode .badge.bg-light {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+/* Botones en modo oscuro */
+body.dark-mode .btn-outline-secondary {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .btn-outline-primary:hover,
+body.dark-mode .btn-outline-info:hover,
+body.dark-mode .btn-outline-danger:hover {
+    color: white;
+}
+
 /* ============================================
    EFECTOS DE HOVER MEJORADOS
    ============================================ */
 
 .product-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
 }
@@ -102,25 +493,31 @@
 .product-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s;
 }
 
 .product-card:hover::before {
+    top: 100%;
     left: 100%;
 }
 
 .product-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(255, 107, 157, 0.3) !important;
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 20px 50px rgba(255, 107, 157, 0.3);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.15) rotate(2deg);
 }
 
 /* ============================================
-   BOTONES CON EFECTOS
+   EFECTOS DE BOTONES
    ============================================ */
 
 .btn-primary-custom {
@@ -183,6 +580,7 @@
     transform: translateX(400px);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     min-width: 300px;
+    animation: slideInRight 0.5s forwards;
 }
 
 .toast-notification.show {
@@ -215,6 +613,11 @@
     color: #dc3545;
 }
 
+body.dark-mode .toast-notification {
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
 /* ============================================
    LOADING SPINNER
    ============================================ */
@@ -225,11 +628,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9998;
+    animation: fadeIn 0.3s;
 }
 
 .loading-spinner .spinner-border {
@@ -238,88 +642,16 @@
 }
 
 /* ============================================
-   INPUTS MEJORADOS
-   ============================================ */
-
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-
-.form-control,
-.form-select {
-    transition: all 0.3s ease;
-}
-
-/* Validación animada */
-.is-valid {
-    border-color: #28a745 !important;
-    animation: shake 0.3s;
-}
-
-.is-invalid {
-    border-color: #dc3545 !important;
-    animation: shake 0.5s;
-}
-
-/* ============================================
-   BADGES ANIMADOS
-   ============================================ */
-
-.badge {
-    transition: all 0.3s ease;
-    cursor: default;
-}
-
-.badge:hover {
-    transform: scale(1.1);
-}
-
-/* ============================================
-   CARDS CON EFECTOS 3D
-   ============================================ */
-
-.stats-card {
-    transition: all 0.3s ease;
-}
-
-.stats-card:hover {
-    transform: translateY(-5px) rotateX(5deg);
-}
-
-/* ============================================
-   SKELETON LOADING
-   ============================================ */
-
-.skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s ease-in-out infinite;
-}
-
-@keyframes loading {
-    0% {
-        background-position: 200% 0;
-    }
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-/* ============================================
    SCROLLBAR PERSONALIZADO
    ============================================ */
 
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--bg-secondary);
     border-radius: 10px;
 }
 
@@ -332,60 +664,91 @@
     background: var(--secondary-color);
 }
 
-/* ============================================
-   TABLAS INTERACTIVAS
-   ============================================ */
-
-.table tbody tr {
-    transition: all 0.2s ease;
-}
-
-.table tbody tr:hover {
-    background: linear-gradient(90deg, rgba(255, 107, 157, 0.05), transparent) !important;
-    transform: scale(1.01);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+body.dark-mode ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
 }
 
 /* ============================================
-   MODO OSCURO (OPCIONAL)
+   SKELETON LOADING
    ============================================ */
 
-body.dark-mode {
-    background: #1a1a1a;
-    color: #ffffff;
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
 }
 
-body.dark-mode .card {
-    background: #2d2d2d;
-    color: #ffffff;
-}
-
-body.dark-mode .table {
-    color: #ffffff;
-}
-
-body.dark-mode .form-control,
-body.dark-mode .form-select {
-    background: #2d2d2d;
-    border-color: #444;
-    color: #ffffff;
+body.dark-mode .skeleton {
+    background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+    background-size: 200% 100%;
 }
 
 /* ============================================
-   PROGRESS BAR
+   EFECTOS ESPECIALES DE ANIME
    ============================================ */
 
-.progress-bar-animated {
-    animation: progress-bar-stripes 1s linear infinite;
+.anime-text-effect {
+    background: linear-gradient(45deg, #ff6b9d, #c44569, #ffa502, #ff6b9d);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-animation 3s ease infinite;
 }
 
-@keyframes progress-bar-stripes {
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.kawaii-bounce {
+    animation: kawaii-bounce 1s ease-in-out infinite;
+}
+
+@keyframes kawaii-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.spin-slow {
+    animation: rotate 10s linear infinite;
+}
+
+/* ============================================
+   EFECTOS DE PARTÍCULAS EN CARDS
+   ============================================ */
+
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: sparkle-animation 1s ease-out forwards;
+}
+
+@keyframes sparkle-animation {
     0% {
-        background-position: 1rem 0;
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
     }
     100% {
-        background-position: 0 0;
+        transform: scale(1) rotate(180deg);
+        opacity: 0;
     }
+}
+
+/* ============================================
+   CONTADOR DE CARACTERES
+   ============================================ */
+
+.char-counter {
+    display: block;
+    text-align: right;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
 }
 
 /* ============================================
@@ -419,54 +782,35 @@ body.dark-mode .form-select {
     opacity: 1;
 }
 
-/* ============================================
-   IMÁGENES CON EFECTOS
-   ============================================ */
-
-.product-image {
-    transition: transform 0.5s ease;
-}
-
-.product-card:hover .product-image {
-    transform: scale(1.1);
+body.dark-mode [data-tooltip]::before {
+    background: var(--primary-color);
 }
 
 /* ============================================
-   CONTADOR DE CARACTERES
+   EFECTOS DE NEON (TEMA CYBERPUNK ANIME)
    ============================================ */
 
-.char-counter {
-    display: block;
-    text-align: right;
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    transition: color 0.3s ease;
+.neon-text {
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px var(--primary-color),
+        0 0 40px var(--primary-color),
+        0 0 80px var(--primary-color);
+    animation: neon-flicker 3s infinite alternate;
 }
 
-/* ============================================
-   GRADIENTES ANIMADOS
-   ============================================ */
-
-.gradient-animated {
-    background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-    background-size: 600% 600%;
-    animation: gradient-animation 8s ease infinite;
-}
-
-@keyframes gradient-animation {
-    0% {
-        background-position: 0% 50%;
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
     }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
+    20%, 24%, 55% {
+        opacity: 0.8;
     }
 }
 
 /* ============================================
-   RESPONSIVE MEJORAS
+   RESPONSIVE
    ============================================ */
 
 @media (max-width: 768px) {
@@ -479,6 +823,18 @@ body.dark-mode .form-select {
     .product-card:hover {
         transform: translateY(-5px);
     }
+    
+    .dark-mode-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .anime-particles {
+        display: none;
+    }
 }
 
 /* ============================================
@@ -486,14 +842,48 @@ body.dark-mode .form-select {
    ============================================ */
 
 @media print {
-    .sidebar,
-    .top-bar,
+    .dark-mode-toggle,
+    .anime-particles,
+    .navbar,
+    .footer,
     .btn,
     .alert {
         display: none !important;
     }
-    
-    .main-content {
-        margin-left: 0 !important;
-    }
+}
+
+
+/* Vista lista de productos */
+.list-group-item.product-card {
+    background: var(--card-bg);
+    transition: all 0.3s ease;
+}
+
+.list-group-item.product-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+}
+
+body.dark-mode .list-group-item.product-card {
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+/* Estilos de paginación mejorados */
+.pagination .page-link {
+    border-radius: 10px;
+    margin: 0 3px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
 }

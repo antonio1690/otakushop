@@ -232,6 +232,24 @@
                 margin-left: 0;
             }
         }
+        /* Admin en modo oscuro */
+        body.dark-mode .admin-card {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .sidebar {
+            background: linear-gradient(180deg, #0a0e27 0%, #16213e 100%);
+        }
+
+        body.dark-mode .top-bar {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .stats-card {
+            color: white !important;
+        }
     </style>
 
     @stack('styles')

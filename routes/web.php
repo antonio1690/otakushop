@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\FranchiseController as AdminFranchiseController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/catalogo', [HomeController::class, 'catalog'])->name('catalog');
 Route::get('/productos/{product}', [HomeController::class, 'show'])->name('products.show');
-
+Route::get('/api/products/search', [HomeController::class, 'searchProducts'])->name('products.search');
 // Rutas de autenticación (generadas por Breeze)
 require __DIR__.'/auth.php';
 
