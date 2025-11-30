@@ -16,8 +16,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/catalogo', [HomeController::class, 'catalog'])->name('catalog');
 Route::get('/productos/{product}', [HomeController::class, 'show'])->name('products.show');
 Route::get('/api/products/search', [HomeController::class, 'searchProducts'])->name('products.search');
+
 // Rutas de autenticación (generadas por Breeze)
 require __DIR__.'/auth.php';
+
+// Google OAuth
+Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
 
 // Rutas protegidas (requieren autenticación)
 Route::middleware('auth')->group(function () {

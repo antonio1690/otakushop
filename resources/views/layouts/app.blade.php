@@ -518,18 +518,18 @@
                                 </li>
                             </ul>
                         </li>
-                    @else
-                        <li class="nav-item me-2 mb-2 mb-lg-0">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2 mb-lg-0">
-                            <a class="nav-link btn-cart" href="{{ route('register') }}">
-                                <i class="bi bi-person-plus"></i> Registrarse
-                            </a>
-                        </li>
-                    @endauth
+                        @else
+                            <li class="nav-item me-2 mb-2 mb-lg-0">
+                                <a class="nav-link" href="{{ route('login') }}" style="transition: all 0.3s ease;">
+                                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                                </a>
+                            </li>
+                            <li class="nav-item mb-2 mb-lg-0">
+                                <a class="btn btn-light fw-semibold px-4" href="{{ route('register') }}" style="border-radius: 50px; transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                                    <i class="bi bi-person-plus-fill"></i> Registrarse
+                                </a>
+                            </li>
+                        @endauth
                 </ul>
             </div>
         </div>
