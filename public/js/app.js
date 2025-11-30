@@ -496,4 +496,62 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-console.log('💫 ¿Sabías que hay un código secreto? Prueba: ↑↑↓↓←→←→BA');
+// ============================================
+// MODAL DE ZOOM DE IMAGEN
+// ============================================
+window.showImageModal = function(imageSrc, title) {
+    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('modalImageTitle').textContent = title;
+    modal.show();
+};
+
+// ============================================
+// LAZY LOADING MEJORADO
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const lazyImages = document.querySelectorAll('.lazy-image');
+    
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+    } else {
+        // Fallback para navegadores antiguos
+        lazyImages.forEach(img => {
+            img.src = img.dataset.src;
+            img.classList.add('loaded');
+        });
+    }
+});
+
+// ============================================
+// SKELETON LOADING PARA IMÁGENES
+// ============================================
+function addImageSkeleton() {
+    const productImages = document.querySelectorAll('.product-image');
+    
+    productImages.forEach(img => {
+        // Añadir skeleton mientras carga
+        img.parentElement.style.background = 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)';
+        img.parentElement.style.backgroundSize = '200% 100%';
+        img.parentElement.style.animation = 'shimmer 1.5s infinite';
+        
+        img.addEventListener('load', function() {
+            img.parentElement.style.background = 'none';
+            img.parentElement.style.animation = 'none';
+        });
+    });
+}
+
+// Llamar al cargar
+document.addEventListener('DOMContentLoaded', addImageSkeleton);

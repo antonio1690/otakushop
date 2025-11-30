@@ -10,12 +10,15 @@ class Product extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'name',
         'description',
         'price',
         'stock',
         'image',
+        'image_url',
+        'image_type',  
         'category_id',
         'franchise_id',
         'is_preorder',
@@ -30,7 +33,19 @@ class Product extends Model
         'release_date' => 'date'
     ];
 
-    // Relaciones
+    // Añadir método helper para obtener la imagen
+    public function getImageUrl()
+    {
+        if ($this->image_type === 'url' && $this->image_url) {
+            return $this->image_url;
+        }
+    
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+    
+        return null;
+    }
     public function category()
     {
         return $this->belongsTo(Category::class);

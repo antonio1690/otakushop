@@ -887,3 +887,88 @@ body.dark-mode .list-group-item.product-card {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border: none;
 }
+
+/* ============================================
+   MEJORAS DE IMÁGENES
+   ============================================ */
+
+/* Overlay de zoom en cards */
+.product-card .image-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.product-card:hover .image-overlay {
+    opacity: 1;
+}
+
+/* Efecto de zoom suave en imagen principal */
+.main-product-image {
+    transition: transform 0.3s ease;
+}
+
+/* Miniaturas */
+.thumbnail-image {
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.thumbnail-image:hover,
+.thumbnail-image.active {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Placeholder animado */
+.product-image-placeholder {
+    animation: gradient-shift 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Modal de imagen */
+#imageModal .modal-content {
+    background: rgba(0, 0, 0, 0.95) !important;
+}
+
+#imageModal img {
+    max-width: 100%;
+    object-fit: contain;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Lazy loading skeleton */
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.image-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Error de imagen - mejor fallback */
+img.error {
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modo oscuro */
+body.dark-mode .product-image-placeholder {
+    opacity: 0.8;
+}
+
+body.dark-mode #imageModal .modal-content {
+    background: rgba(0, 0, 0, 0.98) !important;
+}

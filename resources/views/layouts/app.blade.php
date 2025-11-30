@@ -612,7 +612,22 @@
         </div>
     </footer>
 
-     <!-- Caracteres japoneses decorativos de fondo -->
+        <!-- Modal de Zoom de Imagen -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: transparent; border: none;">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-0">
+                    <img id="modalImage" src="" alt="" class="img-fluid" style="border-radius: 20px; max-height: 80vh;">
+                    <h5 class="text-white mt-3 fw-bold" id="modalImageTitle"></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Caracteres japoneses decorativos de fondo -->
     <div class="japanese-bg-text" style="position: fixed; top: 15%; right: -50px; font-size: 10rem; opacity: 0.03; z-index: 0; font-family: 'Noto Sans JP', sans-serif; pointer-events: none; color: var(--primary-color); transform: rotate(15deg);">
         アニメ
     </div>

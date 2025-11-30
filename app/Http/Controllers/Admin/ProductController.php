@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Franchise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -34,6 +35,7 @@ class ProductController extends Controller
     /**
      * Almacenar un nuevo recurso en el almacenamiento.
      */
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -46,13 +48,29 @@ class ProductController extends Controller
             'is_preorder' => 'boolean',
             'release_date' => 'nullable|date',
             'featured' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'image_url' => 'nullable|url'
         ]);
 
-        // Manejar la subida de imagen
+        // Manejar la subida de imagen con optimización
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-            $validated['image'] = $imagePath;
+            $image = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = public_path('storage/products/' . $filename);
+        
+            // Crear directorio si no existe
+            if (!file_exists(public_path('storage/products'))) {
+                mkdir(public_path('storage/products'), 0777, true);
+            }
+        
+            // Redimensionar y optimizar imagen
+            Image::make($image)
+                ->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })
+                ->save($path, 85); // 85% de calidad        
+            $validated['image'] = 'products/' . $filename;
         }
 
         Product::create($validated);
