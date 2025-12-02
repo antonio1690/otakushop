@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Http\Middleware\TrustProxies as Middleware;
+use Illuminate\Http\Request;
+
+class TrustProxies extends Middleware
+{
+    /**
+     * Los proxies de confianza para esta aplicación.
+     *
+     * @var array<int, string>|string|null
+     */
+    protected $proxies = '*'; // Confiar en todos los proxies (Railway)
+
+    /**
+     * Los encabezados que se deben usar para detectar proxies.
+     *
+     * @var int
+     */
+    protected $headers =
+        Request::HEADER_X_FORWARDED_FOR |
+        Request::HEADER_X_FORWARDED_HOST |
+        Request::HEADER_X_FORWARDED_PORT |
+        Request::HEADER_X_FORWARDED_PROTO |
+        Request::HEADER_X_FORWARDED_AWS_ELB;
+}
