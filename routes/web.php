@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     // Perfil de usuario
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/perfil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Carrito de compras
