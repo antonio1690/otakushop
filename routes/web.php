@@ -68,3 +68,67 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::delete('orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
 });
+
+// ============================================
+// RUTA TEMPORAL PARA SETUP - ELIMINAR DESPUÉS
+// ============================================
+Route::get('/admin/setup-database-now', function () {
+    // Solo permitir en producción Y solo una vez
+    $alreadySeeded = \App\Models\Product::count() > 0;
+    
+    if ($alreadySeeded) {
+        return response()->json([
+            'status' => 'already_done',
+            'message' => 'La base de datos ya tiene datos. No se puede ejecutar de nuevo.',
+            'products' => \App\Models\Product::count(),
+            'categories' => \App\Models\Category::count(),
+            'franchises' => \App\Models\Franchise::count(),
+            'users' => \App\Models\User::count()
+        ]);
+    }
+    
+    try {
+        // Ejecutar seeders
+        \Artisan::call('db:seed', [
+            '--class' => 'Database\\Seeders\\CategorySeeder',
+            '--force' => true
+        ]);
+        
+        \Artisan::call('db:seed', [
+            '--class' => 'Database\\Seeders\\FranchiseSeeder',
+            '--force' => true
+        ]);
+        
+        \Artisan::call('db:seed', [
+            '--class' => 'Database\\Seeders\\UserSeeder',
+            '--force' => true
+        ]);
+        
+        \Artisan::call('db:seed', [
+            '--class' => 'Database\\Seeders\\ProductSeeder',
+            '--force' => true
+        ]);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => '✅ Base de datos configurada correctamente',
+            'data' => [
+                'products' => \App\Models\Product::count(),
+                'categories' => \App\Models\Category::count(),
+                'franchises' => \App\Models\Franchise::count(),
+                'users' => \App\Models\User::count()
+            ],
+            'credentials' => [
+                'admin' => 'admin@otakushop.com / admin123',
+                'cliente' => 'cliente@otakushop.com / cliente123'
+            ]
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ], 500);
+    }
+})->name('setup.database');
