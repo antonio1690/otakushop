@@ -130,9 +130,15 @@
                 <div class="card product-card h-100">
                     <div class="position-relative overflow-hidden" style="height: 280px;">
                         @if($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                 class="product-image" 
-                                 alt="{{ $product->name }}">
+                            @if(Str::startsWith($product->image, 'http'))
+                                <img src="{{ $product->image }}" 
+                                    class="product-image" 
+                                    alt="{{ $product->name }}">
+                            @else
+                                <img src="{{ asset('storage/' . $product->image) }}" 
+                                class="product-image" 
+                                alt="{{ $product->name }}">
+                            @endif
                         @else
                             <div class="product-image bg-light d-flex align-items-center justify-content-center">
                                 <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>

@@ -22,13 +22,20 @@
                 <!-- Avatar -->
                 <div class="position-relative d-inline-block mb-3">
                     @if($user->avatar)
-                        <img src="{{ str_contains($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" 
-                             alt="Avatar" 
-                             class="rounded-circle" 
-                             style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--primary-color); box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);">
+                        @if(Str::startsWith($user->avatar, 'http'))
+                            <img src="{{ $user->avatar }}" 
+                                alt="{{ $user->name }}" 
+                                class="rounded-circle" 
+                                style="width: 150px; height: 150px; object-fit: cover; border: 5px solid var(--primary-color);">
+                        @else
+                            <img src="{{ asset('storage/' . $user->avatar) }}" 
+                                alt="{{ $user->name }}" 
+                                class="rounded-circle" 
+                                style="width: 150px; height: 150px; object-fit: cover; border: 5px solid var(--primary-color);">
+                        @endif
                     @else
                         <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                             style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; font-size: 3rem; font-weight: bold; border: 4px solid white; box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);">
+                            style="width: 150px; height: 150px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; font-size: 3rem; font-weight: bold; border: 5px solid white; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
                             {{ substr($user->name, 0, 1) }}
                         </div>
                     @endif

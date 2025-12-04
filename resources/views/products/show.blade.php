@@ -20,12 +20,18 @@
         <div class="card" style="border-radius: 20px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
             <div class="card-body p-4">
                 @if($product->image)
-                    <div class="position-relative">
+                    @if(Str::startsWith($product->image, 'http'))
+                        <img src="{{ $product->image }}" 
+                            class="img-fluid w-100" 
+                            style="border-radius: 15px; max-height: 500px; object-fit: cover;"
+                            alt="{{ $product->name }}">
+                    @else
                         <img src="{{ asset('storage/' . $product->image) }}" 
-                            class="img-fluid w-100 main-product-image" 
-                            style="border-radius: 15px; max-height: 500px; object-fit: cover; cursor: zoom-in;"
-                            alt="{{ $product->name }}"
-                            onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                            class="img-fluid w-100" 
+                            style="border-radius: 15px; max-height: 500px; object-fit: cover;"
+                            alt="{{ $product->name }}">
+                    @endif
+                @else
                     
                         <!-- Icono de zoom -->
                         <div class="position-absolute bottom-0 end-0 m-3">
@@ -229,9 +235,15 @@
             <div class="card product-card h-100">
                 <div class="position-relative">
                     @if($related->image)
-                        <img src="{{ asset('storage/' . $related->image) }}" 
-                             class="product-image" 
-                             alt="{{ $related->name }}">
+                        @if(Str::startsWith($related->image, 'http'))
+                            <img src="{{ $related->image }}" 
+                                class="product-image" 
+                                alt="{{ $related->name }}">
+                        @else
+                            <img src="{{ asset('storage/' . $related->image) }}" 
+                                class="product-image" 
+                                alt="{{ $related->name }}">
+                        @endif
                     @else
                         <div class="product-image bg-light d-flex align-items-center justify-content-center">
                             <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>

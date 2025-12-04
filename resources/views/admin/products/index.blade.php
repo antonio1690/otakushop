@@ -73,10 +73,17 @@
                         <td class="fw-bold">#{{ $product->id }}</td>
                         <td>
                             @if($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" 
-                                     class="img-thumbnail" 
-                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
-                                     alt="{{ $product->name }}">
+                                @if(Str::startsWith($product->image, 'http'))
+                                    <img src="{{ $product->image }}" 
+                                        class="img-thumbnail" 
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
+                                        alt="{{ $product->name }}">
+                                @else
+                                    <img src="{{ asset('storage/' . $product->image) }}" 
+                                        class="img-thumbnail" 
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
+                                        alt="{{ $product->name }}">
+                                @endif
                             @else
                                 <div class="bg-light d-flex align-items-center justify-content-center" 
                                      style="width: 60px; height: 60px; border-radius: 10px;">

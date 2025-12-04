@@ -38,9 +38,15 @@
                         <td class="fw-bold">#{{ $franchise->id }}</td>
                         <td>
                             @if($franchise->logo)
-                                <img src="{{ asset('storage/' . $franchise->logo) }}" 
-                                     class="img-thumbnail" 
-                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+                                @if(Str::startsWith($franchise->logo, 'http'))
+                                    <img src="{{ $franchise->logo }}" 
+                                        class="img-thumbnail" 
+                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+                                @else
+                                    <img src="{{ asset('storage/' . $franchise->logo) }}" 
+                                        class="img-thumbnail" 
+                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+                                @endif
                             @else
                                 <div class="bg-light d-flex align-items-center justify-content-center" 
                                      style="width: 50px; height: 50px; border-radius: 10px;">

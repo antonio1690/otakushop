@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\Franchise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -35,7 +35,6 @@ class ProductController extends Controller
     /**
      * Almacenar un nuevo recurso en el almacenamiento.
      */
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -52,25 +51,32 @@ class ProductController extends Controller
             'image_url' => 'nullable|url'
         ]);
 
-        // Manejar la subida de imagen con optimización
+        // Manejar la subida de imagen a Cloudinary
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('storage/products/' . $filename);
-        
-            // Crear directorio si no existe
-            if (!file_exists(public_path('storage/products'))) {
-                mkdir(public_path('storage/products'), 0777, true);
+            try {
+                $uploadedFileUrl = Cloudinary::upload(
+                    $request->file('image')->getRealPath(),
+                    [
+                        'folder' => 'otakushop/products',
+                        'transformation' => [
+                            'width' => 800,
+                            'height' => 800,
+                            'crop' => 'fill',
+                            'quality' => 'auto',
+                            'fetch_format' => 'auto'
+                        ]
+                    ]
+                )->getSecurePath();
+
+                $validated['image'] = $uploadedFileUrl;
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->with('error', 'Error al subir la imagen: ' . $e->getMessage())
+                    ->withInput();
             }
-        
-            // Redimensionar y optimizar imagen
-            Image::make($image)
-                ->resize(800, 800, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->save($path, 85); // 85% de calidad        
-            $validated['image'] = 'products/' . $filename;
+        } elseif ($request->filled('image_url')) {
+            // Si se proporciona una URL externa, usarla directamente
+            $validated['image'] = $request->image_url;
         }
 
         Product::create($validated);
@@ -114,18 +120,56 @@ class ProductController extends Controller
             'is_preorder' => 'boolean',
             'release_date' => 'nullable|date',
             'featured' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'image_url' => 'nullable|url'
         ]);
 
-        // Manejar la subida de imagen
+        // Manejar la subida de imagen a Cloudinary
         if ($request->hasFile('image')) {
-            // Eliminar imagen anterior si existe
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
+            try {
+                // Eliminar imagen anterior de Cloudinary si existe
+                if ($product->image && str_contains($product->image, 'cloudinary')) {
+                    $publicId = $this->getPublicIdFromUrl($product->image);
+                    if ($publicId) {
+                        Cloudinary::destroy($publicId);
+                    }
+                }
+                // Si la imagen anterior era local, eliminarla también
+                elseif ($product->image && !str_contains($product->image, 'http')) {
+                    Storage::disk('public')->delete($product->image);
+                }
 
-            $imagePath = $request->file('image')->store('products', 'public');
-            $validated['image'] = $imagePath;
+                // Subir nueva imagen a Cloudinary
+                $uploadedFileUrl = Cloudinary::upload(
+                    $request->file('image')->getRealPath(),
+                    [
+                        'folder' => 'otakushop/products',
+                        'transformation' => [
+                            'width' => 800,
+                            'height' => 800,
+                            'crop' => 'fill',
+                            'quality' => 'auto',
+                            'fetch_format' => 'auto'
+                        ]
+                    ]
+                )->getSecurePath();
+
+                $validated['image'] = $uploadedFileUrl;
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->with('error', 'Error al actualizar la imagen: ' . $e->getMessage())
+                    ->withInput();
+            }
+        } elseif ($request->filled('image_url')) {
+            // Si se actualiza con una URL externa
+            // Eliminar imagen anterior de Cloudinary si existe
+            if ($product->image && str_contains($product->image, 'cloudinary')) {
+                $publicId = $this->getPublicIdFromUrl($product->image);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
+            }
+            $validated['image'] = $request->image_url;
         }
 
         $product->update($validated);
@@ -139,8 +183,19 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        // Eliminar imagen si existe
-        if ($product->image) {
+        // Eliminar imagen de Cloudinary si existe
+        if ($product->image && str_contains($product->image, 'cloudinary')) {
+            try {
+                $publicId = $this->getPublicIdFromUrl($product->image);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
+            } catch (\Exception $e) {
+                // Continuar con la eliminación del producto aunque falle la eliminación de la imagen
+            }
+        }
+        // Si la imagen es local, eliminarla también
+        elseif ($product->image && !str_contains($product->image, 'http')) {
             Storage::disk('public')->delete($product->image);
         }
 
@@ -148,5 +203,28 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Producto eliminado exitosamente.');
+    }
+
+    /**
+     * Extraer el public_id de una URL de Cloudinary.
+     */
+    private function getPublicIdFromUrl($url)
+    {
+        // URL ejemplo: https://res.cloudinary.com/cloud_name/image/upload/v1234567890/otakushop/products/filename.jpg
+        $parts = explode('/', parse_url($url, PHP_URL_PATH));
+        
+        // Encontrar el índice de 'upload'
+        $uploadIndex = array_search('upload', $parts);
+        
+        if ($uploadIndex === false) {
+            return null;
+        }
+        
+        // Todo después de 'upload' y el version number es el public_id
+        $publicIdParts = array_slice($parts, $uploadIndex + 2); // +2 para saltar 'upload' y 'v1234567890'
+        $publicIdWithExtension = implode('/', $publicIdParts);
+        
+        // Quitar la extensión
+        return pathinfo($publicIdWithExtension, PATHINFO_DIRNAME) . '/' . pathinfo($publicIdWithExtension, PATHINFO_FILENAME);
     }
 }

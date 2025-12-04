@@ -143,21 +143,24 @@
 
                     @if($product->image)
                         <div class="mb-3 text-center">
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                 class="img-fluid" 
-                                 style="max-height: 250px; border-radius: 15px;">
-                            <p class="text-muted small mt-2">Imagen actual</p>
-                        </div>
-                    @endif
+                            @if(Str::startsWith($product->image, 'http'))
+                                <img src="{{ $product->image }}" 
+                                    class="img-fluid" 
+                                    style="max-height: 250px; border-radius: 15px;">
+                            @else
+                                <img src="{{ asset('storage/' . $product->image) }}" 
+                                    class="img-fluid" 
+                                    style="max-height: 250px; border-radius: 15px;">
+                            @endif
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Cambiar Imagen</label>
                         <input type="file" 
-                               name="image" 
-                               class="form-control" 
-                               accept="image/*"
-                               onchange="previewImage(event)"
-                               style="border-radius: 15px;">
+                            name="image" 
+                            class="form-control" 
+                            accept="image/*"
+                            onchange="previewImage(event)"
+                            style="border-radius: 15px;">
                         <small class="text-muted">Deja vacío para mantener la imagen actual</small>
                     </div>
 
