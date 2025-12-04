@@ -152,6 +152,8 @@
                                     class="img-fluid" 
                                     style="max-height: 250px; border-radius: 15px;">
                             @endif
+                        </div>
+                    @endif
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Cambiar Imagen</label>
