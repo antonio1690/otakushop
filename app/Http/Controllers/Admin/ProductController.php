@@ -65,7 +65,7 @@ class ProductController extends Controller
             }
         
             // Redimensionar y optimizar imagen
-            Image::make($image)
+            Image::read($image)
                 ->resize(800, 800, function ($constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
