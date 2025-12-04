@@ -57,9 +57,7 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('products', $filename, 'public');
-
-            $validated['image'] = $path;
+            $path = public_path('storage/products/' . $filename);
         
             // Crear directorio si no existe
             if (!file_exists(public_path('storage/products'))) {
@@ -122,17 +120,14 @@ class ProductController extends Controller
 
         // Manejar la subida de imagen
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('products', $filename, 'public');
-
-            // Borrar imagen anterior si existe
+            // Eliminar imagen anterior si existe
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
-            $validated['image'] = $path;
-        }
 
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validated['image'] = $imagePath;
+        }
 
         $product->update($validated);
 
