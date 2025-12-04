@@ -14,48 +14,36 @@
 </nav>
 
 <div class="row">
-    <!-- Imagen del Producto -->
+    
+        <!-- Imagen del Producto -->
     <div class="col-lg-5 mb-4">
         <div class="card" style="border-radius: 20px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
             <div class="card-body p-4">
                 @if($product->image)
                     <div class="position-relative">
-                        @if(Str::startsWith($product->image, 'http'))
-                            <img src="{{ $product->image }}" 
-                                class="img-fluid w-100 main-product-image" 
-                                style="border-radius: 15px; max-height: 500px; object-fit: cover; transition: transform 0.3s ease;"
-                                alt="{{ $product->name }}">
-                        @else
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                class="img-fluid w-100 main-product-image" 
-                                style="border-radius: 15px; max-height: 500px; object-fit: cover; transition: transform 0.3s ease;"
-                                alt="{{ $product->name }}">
-                        @endif
-
+                        <img src="{{ asset('storage/' . $product->image) }}" 
+                            class="img-fluid w-100 main-product-image" 
+                            style="border-radius: 15px; max-height: 500px; object-fit: cover; cursor: zoom-in;"
+                            alt="{{ $product->name }}"
+                            onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                    
                         <!-- Icono de zoom -->
                         <div class="position-absolute bottom-0 end-0 m-3">
                             <button class="btn btn-light rounded-circle" 
                                 style="width: 50px; height: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);"
-                                onclick="showImageModal('{{ Str::startsWith($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                                onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
                                 <i class="bi bi-zoom-in"></i>
                             </button>
                         </div>
                     </div>
-
+                
                     <!-- Galería de miniaturas (preparado para futuro) -->
                     <div class="row mt-3 g-2">
                         <div class="col-3">
-                            @if(Str::startsWith($product->image, 'http'))
-                                <img src="{{ $product->image }}" 
-                                    class="img-fluid thumbnail-image active" 
-                                    style="border-radius: 10px; cursor: pointer; border: 3px solid var(--primary-color);"
-                                    onclick="changeMainImage('{{ $product->image }}', this)">
-                            @else
-                                <img src="{{ asset('storage/' . $product->image) }}" 
-                                    class="img-fluid thumbnail-image active" 
-                                    style="border-radius: 10px; cursor: pointer; border: 3px solid var(--primary-color);"
-                                    onclick="changeMainImage('{{ asset('storage/' . $product->image) }}', this)">
-                            @endif
+                            <img src="{{ asset('storage/' . $product->image) }}" 
+                                class="img-fluid thumbnail-image active" 
+                                style="border-radius: 10px; cursor: pointer; border: 3px solid var(--primary-color);"
+                                onclick="changeMainImage('{{ asset('storage/' . $product->image) }}', this)">
                         </div>
                         <!-- Aquí puedes añadir más miniaturas en el futuro -->
                     </div>
@@ -70,6 +58,46 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+    // Cambiar imagen principal al hacer clic en miniatura
+    function changeMainImage(imageSrc, thumbnail) {
+        const mainImage = document.querySelector('.main-product-image');
+        mainImage.src = imageSrc;
+    
+        // Quitar clase active de todas las miniaturas
+        document.querySelectorAll('.thumbnail-image').forEach(img => {
+            img.style.border = '3px solid transparent';
+            img.classList.remove('active');
+        });
+    
+        // Añadir clase active a la miniatura clickeada
+        thumbnail.style.border = '3px solid var(--primary-color)';
+        thumbnail.classList.add('active');
+    }
+
+    // Efecto de zoom suave al pasar el mouse
+    const mainImage = document.querySelector('.main-product-image');
+    if (mainImage) {
+        mainImage.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+        
+            const xPercent = (x / rect.width) * 100;
+            const yPercent = (y / rect.height) * 100;
+        
+            this.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+            this.style.transform = 'scale(1.5)';
+        });
+    
+        mainImage.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    }
+    </script>
+    @endpush
 
     <!-- Información del Producto -->
     <div class="col-lg-7">
@@ -199,28 +227,20 @@
         @foreach($relatedProducts as $related)
         <div class="col-md-6 col-lg-3">
             <div class="card product-card h-100">
-                <div class="position-relative" style="height: 200px; overflow: hidden;">
+                <div class="position-relative">
                     @if($related->image)
-                        @if(Str::startsWith($related->image, 'http'))
-                            <img src="{{ $related->image }}" 
-                                class="product-image w-100 h-100" 
-                                style="object-fit: cover;"
-                                alt="{{ $related->name }}">
-                        @else
-                            <img src="{{ asset('storage/' . $related->image) }}" 
-                                class="product-image w-100 h-100" 
-                                style="object-fit: cover;"
-                                alt="{{ $related->name }}">
-                        @endif
+                        <img src="{{ asset('storage/' . $related->image) }}" 
+                             class="product-image" 
+                             alt="{{ $related->name }}">
                     @else
-                        <div class="product-image bg-light d-flex align-items-center justify-content-center h-100">
+                        <div class="product-image bg-light d-flex align-items-center justify-content-center">
                             <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
                         </div>
                     @endif
                 </div>
                 
                 <div class="card-body">
-                    <h6 class="card-title fw-bold mb-2">{{ Str::limit($related->name, 40) }}</h6>
+                    <h6 class="card-title fw-bold mb-2">{{ $related->name }}</h6>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="h6 mb-0 fw-bold" style="color: var(--primary-color);">
                             {{ number_format($related->price, 2) }}€
@@ -239,45 +259,3 @@
 @endif
 
 @endsection
-
-@push('scripts')
-<script>
-// Cambiar imagen principal al hacer clic en miniatura
-function changeMainImage(imageSrc, thumbnail) {
-    const mainImage = document.querySelector('.main-product-image');
-    if (mainImage) {
-        mainImage.src = imageSrc;
-    }
-
-    // Quitar clase active de todas las miniaturas
-    document.querySelectorAll('.thumbnail-image').forEach(img => {
-        img.style.border = '3px solid transparent';
-        img.classList.remove('active');
-    });
-
-    // Añadir clase active a la miniatura clickeada
-    thumbnail.style.border = '3px solid var(--primary-color)';
-    thumbnail.classList.add('active');
-}
-
-// Efecto de zoom suave al pasar el mouse
-const mainImage = document.querySelector('.main-product-image');
-if (mainImage) {
-    mainImage.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-    
-        const xPercent = (x / rect.width) * 100;
-        const yPercent = (y / rect.height) * 100;
-    
-        this.style.transformOrigin = `${xPercent}% ${yPercent}%`;
-        this.style.transform = 'scale(1.5)';
-    });
-
-    mainImage.addEventListener('mouseleave', function() {
-        this.style.transform = 'scale(1)';
-    });
-}
-</script>
-@endpush

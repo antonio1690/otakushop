@@ -326,17 +326,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Renderizar card en vista grid
     function renderGridCard(product) {
+        const imageUrl = product.image ? `/storage/${product.image}` : '';
         const stockBadge = getStockBadge(product);
-        
-        // Determinar si es URL completa o local
-        let imageUrl = '';
-        if (product.image) {
-            if (product.image.startsWith('http')) {
-                imageUrl = product.image; // URL de Cloudinary
-            } else {
-                imageUrl = `/storage/${product.image}`; // URL local
-            }
-        }
         
         return `
             <div class="col-md-6 col-lg-4">
@@ -382,17 +373,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Renderizar card en vista lista
     function renderListCard(product) {
+        const imageUrl = product.image ? `/storage/${product.image}` : '';
         const stockBadge = getStockBadge(product);
-        
-        // Determinar si es URL completa o local
-        let imageUrl = '';
-        if (product.image) {
-            if (product.image.startsWith('http')) {
-                imageUrl = product.image; // URL de Cloudinary
-            } else {
-                imageUrl = `/storage/${product.image}`; // URL local
-            }
-        }
         
         return `
             <div class="list-group-item product-card mb-3" style="border-radius: 20px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">

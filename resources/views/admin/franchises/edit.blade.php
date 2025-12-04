@@ -46,17 +46,12 @@
                     </div>
 
                     @if($franchise->logo)
-                        <div class="mb-3 text-center">
-                            @if(Str::startsWith($franchise->logo, 'http'))
-                                <img src="{{ $franchise->logo }}" 
-                                    class="img-fluid" 
-                                    style="max-height: 150px; border-radius: 15px;">
-                            @else
-                                <img src="{{ asset('storage/' . $franchise->logo) }}" 
-                                    class="img-fluid" 
-                                    style="max-height: 150px; border-radius: 15px;">
-                            @endif
-                        </div>
+                    <div class="mb-3 text-center">
+                        <img src="{{ asset('storage/' . $franchise->logo) }}" 
+                             class="img-fluid" 
+                             style="max-height: 150px; border-radius: 15px;">
+                        <p class="text-muted small mt-2">Logo actual</p>
+                    </div>
                     @endif
 
                     <div class="mb-4">
