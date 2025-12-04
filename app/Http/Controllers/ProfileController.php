@@ -75,9 +75,11 @@ class ProfileController extends Controller
             // Eliminar avatar anterior de Cloudinary si existe
             if ($user->avatar && str_contains($user->avatar, 'cloudinary')) {
                 $publicId = $this->getPublicIdFromUrl($user->avatar);
-                Cloudinary::destroy($publicId);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
             }
-            // Si el avatar anterior era local (de storage), eliminarlo también
+            // Si el avatar anterior era local, eliminarlo también
             elseif ($user->avatar && !str_contains($user->avatar, 'googleusercontent') && !str_contains($user->avatar, 'http')) {
                 Storage::disk('public')->delete($user->avatar);
             }
@@ -124,7 +126,9 @@ class ProfileController extends Controller
         if ($user->avatar && str_contains($user->avatar, 'cloudinary')) {
             try {
                 $publicId = $this->getPublicIdFromUrl($user->avatar);
-                Cloudinary::destroy($publicId);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
             } catch (\Exception $e) {
                 // Continuar aunque falle la eliminación de la imagen
             }

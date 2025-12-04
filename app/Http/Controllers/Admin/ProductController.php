@@ -21,9 +21,6 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
-    /**
-     * Mostrar el formulario para crear un nuevo recurso.
-     */
     public function create()
     {
         $categories = Category::all();
@@ -32,9 +29,6 @@ class ProductController extends Controller
         return view('admin.products.create', compact('categories', 'franchises'));
     }
 
-    /**
-     * Almacenar un nuevo recurso en el almacenamiento.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -75,7 +69,6 @@ class ProductController extends Controller
                     ->withInput();
             }
         } elseif ($request->filled('image_url')) {
-            // Si se proporciona una URL externa, usarla directamente
             $validated['image'] = $request->image_url;
         }
 
@@ -85,18 +78,12 @@ class ProductController extends Controller
             ->with('success', 'Producto creado exitosamente.');
     }
 
-    /**
-     * Mostrar el recurso especificado.
-     */
     public function show(Product $product)
     {
         $product->load(['category', 'franchise']);
         return view('admin.products.show', compact('product'));
     }
 
-    /**
-     * Mostrar el formulario para editar el recurso especificado.
-     */
     public function edit(Product $product)
     {
         $categories = Category::all();
@@ -105,9 +92,6 @@ class ProductController extends Controller
         return view('admin.products.edit', compact('product', 'categories', 'franchises'));
     }
 
-    /**
-     * Actualizar el recurso especificado en el almacenamiento.
-     */
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
@@ -162,7 +146,6 @@ class ProductController extends Controller
             }
         } elseif ($request->filled('image_url')) {
             // Si se actualiza con una URL externa
-            // Eliminar imagen anterior de Cloudinary si existe
             if ($product->image && str_contains($product->image, 'cloudinary')) {
                 $publicId = $this->getPublicIdFromUrl($product->image);
                 if ($publicId) {
@@ -178,9 +161,6 @@ class ProductController extends Controller
             ->with('success', 'Producto actualizado exitosamente.');
     }
 
-    /**
-     * Eliminar el recurso especificado del almacenamiento.
-     */
     public function destroy(Product $product)
     {
         // Eliminar imagen de Cloudinary si existe
@@ -205,26 +185,18 @@ class ProductController extends Controller
             ->with('success', 'Producto eliminado exitosamente.');
     }
 
-    /**
-     * Extraer el public_id de una URL de Cloudinary.
-     */
     private function getPublicIdFromUrl($url)
     {
-        // URL ejemplo: https://res.cloudinary.com/cloud_name/image/upload/v1234567890/otakushop/products/filename.jpg
         $parts = explode('/', parse_url($url, PHP_URL_PATH));
-        
-        // Encontrar el índice de 'upload'
         $uploadIndex = array_search('upload', $parts);
         
         if ($uploadIndex === false) {
             return null;
         }
         
-        // Todo después de 'upload' y el version number es el public_id
-        $publicIdParts = array_slice($parts, $uploadIndex + 2); // +2 para saltar 'upload' y 'v1234567890'
+        $publicIdParts = array_slice($parts, $uploadIndex + 2);
         $publicIdWithExtension = implode('/', $publicIdParts);
         
-        // Quitar la extensión
         return pathinfo($publicIdWithExtension, PATHINFO_DIRNAME) . '/' . pathinfo($publicIdWithExtension, PATHINFO_FILENAME);
     }
 }
