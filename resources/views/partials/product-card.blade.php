@@ -3,16 +3,14 @@
     <div class="card product-card h-100">
         <div class="position-relative overflow-hidden" style="height: 280px;">
             @if($product->image)
-    @if(Str::startsWith($product->image, 'http'))
-        <img src="{{ $product->image }}" 
-             class="product-image" 
-             alt="{{ $product->name }}">
-    @else
-        <img src="{{ asset('storage/' . $product->image) }}" 
-             class="product-image" 
-             alt="{{ $product->name }}">
-    @endif
-@else
+                <img src="{{ asset('storage/' . $product->image) }}" 
+                     class="product-image lazy-image" 
+                     data-src="{{ asset('storage/' . $product->image) }}"
+                     alt="{{ $product->name }}"
+                     loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400x280/667eea/ffffff?text={{ urlencode($product->category->name) }}'"
+                     onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+            @else
                 <div class="product-image-placeholder d-flex align-items-center justify-content-center flex-column" 
                      style="background: linear-gradient(135deg, {{ ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#fa709a'][rand(0, 4)] }} 0%, {{ ['#764ba2', '#f5576c', '#00f2fe', '#38f9d7', '#fee140'][rand(0, 4)] }} 100%);">
                     <i class="bi bi-image" style="font-size: 4rem; color: rgba(255,255,255,0.5);"></i>

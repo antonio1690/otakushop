@@ -61,19 +61,12 @@
                     @foreach($order->items->take(3) as $item)
                     <div class="col-md-4">
                         <div class="d-flex align-items-center">
-@if($item->product->image)
-    @if(Str::startsWith($item->product->image, 'http'))
-        <img src="{{ $item->product->image }}" 
-             class="me-3" 
-             style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
-             alt="{{ $item->product->name }}">
-    @else
-        <img src="{{ asset('storage/' . $item->product->image) }}" 
-             class="me-3" 
-             style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
-             alt="{{ $item->product->name }}">
-    @endif
-@else
+                            @if($item->product->image)
+                                <img src="{{ asset('storage/' . $item->product->image) }}" 
+                                     class="me-3" 
+                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
+                                     alt="{{ $item->product->name }}">
+                            @else
                                 <div class="bg-light me-3 d-flex align-items-center justify-content-center" 
                                      style="width: 60px; height: 60px; border-radius: 10px;">
                                     <i class="bi bi-image text-muted"></i>

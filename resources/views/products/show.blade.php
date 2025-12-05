@@ -20,18 +20,34 @@
         <div class="card" style="border-radius: 20px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
             <div class="card-body p-4">
                 @if($product->image)
-    @if(Str::startsWith($product->image, 'http'))
-        <img src="{{ $product->image }}" 
-             class="img-fluid w-100" 
-             style="border-radius: 15px; max-height: 500px; object-fit: cover;"
-             alt="{{ $product->name }}">
-    @else
-        <img src="{{ asset('storage/' . $product->image) }}" 
-             class="img-fluid w-100" 
-             style="border-radius: 15px; max-height: 500px; object-fit: cover;"
-             alt="{{ $product->name }}">
-    @endif
-@else
+                    <div class="position-relative">
+                        <img src="{{ asset('storage/' . $product->image) }}" 
+                            class="img-fluid w-100 main-product-image" 
+                            style="border-radius: 15px; max-height: 500px; object-fit: cover; cursor: zoom-in;"
+                            alt="{{ $product->name }}"
+                            onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                    
+                        <!-- Icono de zoom -->
+                        <div class="position-absolute bottom-0 end-0 m-3">
+                            <button class="btn btn-light rounded-circle" 
+                                style="width: 50px; height: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);"
+                                onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                                <i class="bi bi-zoom-in"></i>
+                            </button>
+                        </div>
+                    </div>
+                
+                    <!-- Galería de miniaturas (preparado para futuro) -->
+                    <div class="row mt-3 g-2">
+                        <div class="col-3">
+                            <img src="{{ asset('storage/' . $product->image) }}" 
+                                class="img-fluid thumbnail-image active" 
+                                style="border-radius: 10px; cursor: pointer; border: 3px solid var(--primary-color);"
+                                onclick="changeMainImage('{{ asset('storage/' . $product->image) }}', this)">
+                        </div>
+                        <!-- Aquí puedes añadir más miniaturas en el futuro -->
+                    </div>
+                @else
                     <div class="bg-light d-flex align-items-center justify-content-center flex-column" 
                         style="height: 500px; border-radius: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                         <i class="bi bi-image text-white" style="font-size: 8rem; opacity: 0.5;"></i>
@@ -213,16 +229,10 @@
             <div class="card product-card h-100">
                 <div class="position-relative">
                     @if($related->image)
-    @if(Str::startsWith($related->image, 'http'))
-        <img src="{{ $related->image }}" 
-             class="product-image" 
-             alt="{{ $related->name }}">
-    @else
-        <img src="{{ asset('storage/' . $related->image) }}" 
-             class="product-image" 
-             alt="{{ $related->name }}">
-    @endif
-@else
+                        <img src="{{ asset('storage/' . $related->image) }}" 
+                             class="product-image" 
+                             alt="{{ $related->name }}">
+                    @else
                         <div class="product-image bg-light d-flex align-items-center justify-content-center">
                             <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
                         </div>

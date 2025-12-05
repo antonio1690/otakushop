@@ -53,19 +53,12 @@
                 @foreach($order->items as $item)
                 <div class="row align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                     <div class="col-md-2">
-@if($item->product->image)
-    @if(Str::startsWith($item->product->image, 'http'))
-        <img src="{{ $item->product->image }}" 
-             class="img-fluid" 
-             style="border-radius: 15px; width: 100%; height: 80px; object-fit: cover;"
-             alt="{{ $item->product->name }}">
-    @else
-        <img src="{{ asset('storage/' . $item->product->image) }}" 
-             class="img-fluid" 
-             style="border-radius: 15px; width: 100%; height: 80px; object-fit: cover;"
-             alt="{{ $item->product->name }}">
-    @endif
-@else
+                        @if($item->product->image)
+                            <img src="{{ asset('storage/' . $item->product->image) }}" 
+                                 class="img-fluid" 
+                                 style="border-radius: 15px; width: 100%; height: 80px; object-fit: cover;"
+                                 alt="{{ $item->product->name }}">
+                        @else
                             <div class="bg-light d-flex align-items-center justify-content-center" 
                                  style="border-radius: 15px; height: 80px;">
                                 <i class="bi bi-image text-muted"></i>

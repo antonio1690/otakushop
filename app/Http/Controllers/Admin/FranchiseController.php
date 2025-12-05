@@ -24,71 +24,49 @@ class FranchiseController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255|unique:franchises,name',
-        'description' => 'nullable|string|max:500',
-        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-    ]);
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:franchises,name',
+            'description' => 'nullable|string|max:500',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
 
-    if ($request->hasFile('logo')) {
-        $uploadedFileUrl = cloudinary()->upload(
-            $request->file('logo')->getRealPath(),
-            [
-                'folder' => 'otakushop/franchises',
-                'transformation' => [
-                    'width' => 400,
-                    'height' => 400,
-                    'crop' => 'limit'
-                ]
-            ]
-        )->getSecurePath();
-        
-        $validated['logo'] = $uploadedFileUrl;
+        if ($request->hasFile('logo')) {
+            $validated['logo'] = $request->file('logo')->store('franchises', 'public');
+        }
+
+        Franchise::create($validated);
+
+        return redirect()->route('admin.franchises.index')
+            ->with('success', 'Franquicia creada exitosamente.');
     }
-
-    Franchise::create($validated);
-
-    return redirect()->route('admin.franchises.index')
-        ->with('success', 'Franquicia creada exitosamente.');
-}
-
 
     public function edit(Franchise $franchise)
     {
         return view('admin.franchises.edit', compact('franchise'));
     }
 
-public function update(Request $request, Franchise $franchise)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255|unique:franchises,name,' . $franchise->id,
-        'description' => 'nullable|string|max:500',
-        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-    ]);
+    public function update(Request $request, Franchise $franchise)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:franchises,name,' . $franchise->id,
+            'description' => 'nullable|string|max:500',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
 
-    if ($request->hasFile('logo')) {
-        $uploadedFileUrl = cloudinary()->upload(
-            $request->file('logo')->getRealPath(),
-            [
-                'folder' => 'otakushop/franchises',
-                'transformation' => [
-                    'width' => 400,
-                    'height' => 400,
-                    'crop' => 'limit'
-                ]
-            ]
-        )->getSecurePath();
-        
-        $validated['logo'] = $uploadedFileUrl;
+        if ($request->hasFile('logo')) {
+            // Eliminar logo anterior si existe
+            if ($franchise->logo) {
+                Storage::disk('public')->delete($franchise->logo);
+            }
+            $validated['logo'] = $request->file('logo')->store('franchises', 'public');
+        }
+
+        $franchise->update($validated);
+
+        return redirect()->route('admin.franchises.index')
+            ->with('success', 'Franquicia actualizada exitosamente.');
     }
-
-    $franchise->update($validated);
-
-    return redirect()->route('admin.franchises.index')
-        ->with('success', 'Franquicia actualizada exitosamente.');
-}
-
 
     public function destroy(Franchise $franchise)
     {

@@ -21,9 +21,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Figuras')->first()->id,
                 'franchise_id' => Franchise::where('name', 'One Piece')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
             [
                 'name' => 'Figura Naruto Hokage',
@@ -33,9 +31,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Figuras')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Naruto')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
             [
                 'name' => 'Figura Eren Titán',
@@ -45,9 +41,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Figuras')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Attack on Titan')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
             [
                 'name' => 'Figura Goku Ultra Instinto',
@@ -58,9 +52,7 @@ class ProductSeeder extends Seeder
                 'franchise_id' => Franchise::where('name', 'Dragon Ball')->first()->id,
                 'is_preorder' => true,
                 'release_date' => now()->addMonths(2),
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
 
             // Manga
@@ -72,9 +64,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Manga')->first()->id,
                 'franchise_id' => Franchise::where('name', 'One Piece')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
             [
                 'name' => 'Demon Slayer Vol. 1-5',
@@ -84,9 +74,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Manga')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Demon Slayer')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
             [
                 'name' => 'Jujutsu Kaisen Vol. 20',
@@ -96,9 +84,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Manga')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Jujutsu Kaisen')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
 
             // Ropa
@@ -110,9 +96,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Ropa')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Naruto')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
             [
                 'name' => 'Camiseta Logo Straw Hat',
@@ -122,9 +106,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Ropa')->first()->id,
                 'franchise_id' => Franchise::where('name', 'One Piece')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
             [
                 'name' => 'Chaqueta Survey Corps',
@@ -134,9 +116,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Ropa')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Attack on Titan')->first()->id,
                 'is_preorder' => false,
-                'featured' => true,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => true
             ],
 
             // Cosplay
@@ -148,9 +128,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Cosplay')->first()->id,
                 'franchise_id' => Franchise::where('name', 'My Hero Academia')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
             [
                 'name' => 'Peluca Gojo Satoru',
@@ -160,9 +138,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Cosplay')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Jujutsu Kaisen')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
 
             // Accesorios
@@ -174,9 +150,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Accesorios')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Demon Slayer')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
             [
                 'name' => 'Poster Set Chainsaw Man',
@@ -186,9 +160,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Accesorios')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Chainsaw Man')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
             [
                 'name' => 'Taza Térmica Dragon Ball',
@@ -198,9 +170,7 @@ class ProductSeeder extends Seeder
                 'category_id' => Category::where('name', 'Accesorios')->first()->id,
                 'franchise_id' => Franchise::where('name', 'Dragon Ball')->first()->id,
                 'is_preorder' => false,
-                'featured' => false,
-                'image' => 'https://res.cloudinary.com/dna29j5ke/image/upload/v1764923757/onepiece_jjqyi8.jpg'
-
+                'featured' => false
             ],
         ];
 
