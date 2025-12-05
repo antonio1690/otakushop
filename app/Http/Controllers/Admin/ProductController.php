@@ -53,25 +53,22 @@ class ProductController extends Controller
             'image_url' => 'nullable|url'
         ]);
 
-        // Manejar la subida de imagen con optimización
+        // Subir imagen a Cloudinary si existe
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('storage/products/' . $filename);
-        
-            // Crear directorio si no existe
-            if (!file_exists(public_path('storage/products'))) {
-                mkdir(public_path('storage/products'), 0777, true);
-            }
-        
-            // Redimensionar y optimizar imagen
-            Image::read($image)
-                ->resize(800, 800, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->save($path, 85); // 85% de calidad        
-            $validated['image'] = 'products/' . $filename;
+            $uploadedFileUrl = cloudinary()->upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'otakushop/products',
+                    'transformation' => [
+                        'width' => 800,
+                        'height' => 800,
+                        'crop' => 'limit'
+                    ]
+                ]
+            )->getSecurePath();
+
+            // Guardar URL en la base de datos
+            $validated['image'] = $uploadedFileUrl;
         }
 
         Product::create($validated);
@@ -79,6 +76,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')
             ->with('success', 'Producto creado exitosamente.');
     }
+
 
     /**
      * Mostrar el recurso especificado.
@@ -118,22 +116,30 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Manejar la subida de imagen
+        // Subir nueva imagen a Cloudinary
         if ($request->hasFile('image')) {
-            // Eliminar imagen anterior si existe
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
 
-            $imagePath = $request->file('image')->store('products', 'public');
-            $validated['image'] = $imagePath;
+            $uploadedFileUrl = cloudinary()->upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'otakushop/products',
+                    'transformation' => [
+                        'width' => 800,
+                        'height' => 800,
+                        'crop' => 'limit'
+                    ]
+                ]
+            )->getSecurePath();
+
+            $validated['image'] = $uploadedFileUrl;
         }
 
-        $product->update($validated);
+        $Product->update($validated);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Producto actualizado exitosamente.');
     }
+
 
     /**
      * Eliminar el recurso especificado del almacenamiento.

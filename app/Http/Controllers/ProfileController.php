@@ -44,44 +44,71 @@ class ProfileController extends Controller
     /**
      * Actualizar la información del perfil del usuario.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $user = $request->user();
-        
-        $user->fill($request->validated());
+public function update(Request $request): RedirectResponse
+{
+    $user = $request->user();
+    
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
 
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
+    // Subida del avatar a Cloudinary
+    if ($request->hasFile('avatar')) {
+        $uploadedFileUrl = cloudinary()->upload(
+            $request->file('avatar')->getRealPath(),
+            [
+                'folder' => 'otakushop/avatars',
+                'transformation' => [
+                    'width' => 300,
+                    'height' => 300,
+                    'crop' => 'fill',
+                    'gravity' => 'face'
+                ]
+            ]
+        )->getSecurePath();
 
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('success', 'Perfil actualizado correctamente.');
+        $validated['avatar'] = $uploadedFileUrl;
     }
+
+    $user->update($validated);
+
+    return back()->with('success', 'Perfil actualizado correctamente.');
+}
+
 
     /**
      * Actualizar el avatar del usuario.
      */
-    public function updateAvatar(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+public function updateAvatar(Request $request): RedirectResponse
+{
+    $request->validate([
+        'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
 
-        $user = $request->user();
+    $user = $request->user();
 
-        // Eliminar avatar anterior si existe
-        if ($user->avatar && !str_contains($user->avatar, 'googleusercontent')) {
-            Storage::disk('public')->delete($user->avatar);
-        }
+    // Subida del avatar a Cloudinary
+    $uploadedFileUrl = cloudinary()->upload(
+        $request->file('avatar')->getRealPath(),
+        [
+            'folder' => 'otakushop/avatars',
+            'transformation' => [
+                'width' => 300,
+                'height' => 300,
+                'crop' => 'fill',
+                'gravity' => 'face'
+            ]
+        ]
+    )->getSecurePath();
 
-        // Guardar nuevo avatar
-        $path = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar = $path;
-        $user->save();
+    $user->avatar = $uploadedFileUrl;
+    $user->save();
 
-        return Redirect::route('profile.edit')->with('success', 'Avatar actualizado correctamente.');
-    }
+    return Redirect::route('profile.edit')->with('success', 'Avatar actualizado correctamente.');
+}
+
 
     /**
      * Eliminar la cuenta del usuario.

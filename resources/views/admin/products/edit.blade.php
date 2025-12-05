@@ -140,13 +140,16 @@
             <div class="card admin-card">
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-4">Imagen del Producto</h5>
-
-                    @if($product->image)
-                        <div class="mb-3 text-center">
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                 class="img-fluid" 
-                                 style="max-height: 250px; border-radius: 15px;">
-                            <p class="text-muted small mt-2">Imagen actual</p>
+@if($product->image)
+    <div class="mb-3 text-center">
+        @if(Str::startsWith($product->image, 'http'))
+            <img src="{{ $product->image }}" 
+                 class="img-fluid" 
+                 style="max-height: 250px; border-radius: 15px;">
+        @else
+            <img src="{{ asset('storage/' . $product->image) }}" 
+                 class="img-fluid" 
+                 style="max-height: 250px; border-radius: 15px;">
                         </div>
                     @endif
 
