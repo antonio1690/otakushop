@@ -150,6 +150,7 @@
             <img src="{{ asset('storage/' . $product->image) }}" 
                  class="img-fluid" 
                  style="max-height: 250px; border-radius: 15px;">
+        @endif
                         </div>
                     @endif
 
