@@ -3,6 +3,10 @@
 
 @section('title', $product->name . ' - OtakuShop')
 
+@php
+    $imageUrl = $product->getImageUrl();
+@endphp
+
 @section('content')
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb" class="mb-4">
@@ -15,23 +19,23 @@
 
 <div class="row">
     
-        <!-- Imagen del Producto -->
+    <!-- Imagen del Producto -->
     <div class="col-lg-5 mb-4">
         <div class="card" style="border-radius: 20px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
             <div class="card-body p-4">
-                @if($product->image)
+                @if($imageUrl)
                     <div class="position-relative">
-                        <img src="{{ asset('storage/' . $product->image) }}" 
+                        <img src="{{ $imageUrl }}" 
                             class="img-fluid w-100 main-product-image" 
                             style="border-radius: 15px; max-height: 500px; object-fit: cover; cursor: zoom-in;"
                             alt="{{ $product->name }}"
-                            onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                            onclick="showImageModal('{{ $imageUrl }}', '{{ $product->name }}')">
                     
                         <!-- Icono de zoom -->
                         <div class="position-absolute bottom-0 end-0 m-3">
                             <button class="btn btn-light rounded-circle" 
                                 style="width: 50px; height: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);"
-                                onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                                onclick="showImageModal('{{ $imageUrl }}', '{{ $product->name }}')">
                                 <i class="bi bi-zoom-in"></i>
                             </button>
                         </div>
@@ -40,10 +44,10 @@
                     <!-- Galería de miniaturas (preparado para futuro) -->
                     <div class="row mt-3 g-2">
                         <div class="col-3">
-                            <img src="{{ asset('storage/' . $product->image) }}" 
+                            <img src="{{ $imageUrl }}" 
                                 class="img-fluid thumbnail-image active" 
                                 style="border-radius: 10px; cursor: pointer; border: 3px solid var(--primary-color);"
-                                onclick="changeMainImage('{{ asset('storage/' . $product->image) }}', this)">
+                                onclick="changeMainImage('{{ $imageUrl }}', this)">
                         </div>
                         <!-- Aquí puedes añadir más miniaturas en el futuro -->
                     </div>
@@ -225,11 +229,14 @@
     <h3 class="fw-bold mb-4">Productos Relacionados</h3>
     <div class="row g-4">
         @foreach($relatedProducts as $related)
+        @php
+            $relatedImageUrl = $related->getImageUrl();
+        @endphp
         <div class="col-md-6 col-lg-3">
             <div class="card product-card h-100">
                 <div class="position-relative">
-                    @if($related->image)
-                        <img src="{{ asset('storage/' . $related->image) }}" 
+                    @if($relatedImageUrl)
+                        <img src="{{ $relatedImageUrl }}" 
                              class="product-image" 
                              alt="{{ $related->name }}">
                     @else

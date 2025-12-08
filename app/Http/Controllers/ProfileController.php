@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProfileController extends Controller
 {
@@ -70,17 +71,34 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        // Eliminar avatar anterior si existe
-        if ($user->avatar && !str_contains($user->avatar, 'googleusercontent')) {
-            Storage::disk('public')->delete($user->avatar);
+        try {
+            // Eliminar avatar anterior de Cloudinary si existe (no de Google)
+            if ($user->avatar && str_contains($user->avatar, 'cloudinary')) {
+                $publicId = $this->getCloudinaryPublicId($user->avatar);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
+            }
+
+            // Subir nuevo avatar a Cloudinary
+            $uploadedFile = Cloudinary::upload($request->file('avatar')->getRealPath(), [
+                'folder' => 'otakushop/avatars',
+                'transformation' => [
+                    'width' => 200,
+                    'height' => 200,
+                    'crop' => 'fill',
+                    'gravity' => 'face',
+                    'quality' => 'auto'
+                ]
+            ]);
+
+            $user->avatar = $uploadedFile->getSecurePath();
+            $user->save();
+
+            return Redirect::route('profile.edit')->with('success', 'Avatar actualizado correctamente.');
+        } catch (\Exception $e) {
+            return Redirect::route('profile.edit')->with('error', 'Error al subir el avatar: ' . $e->getMessage());
         }
-
-        // Guardar nuevo avatar
-        $path = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar = $path;
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('success', 'Avatar actualizado correctamente.');
     }
 
     /**
@@ -94,6 +112,18 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        // Eliminar avatar de Cloudinary si existe
+        if ($user->avatar && str_contains($user->avatar, 'cloudinary')) {
+            try {
+                $publicId = $this->getCloudinaryPublicId($user->avatar);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
+            } catch (\Exception $e) {
+                // Continuar aunque falle la eliminación
+            }
+        }
+
         Auth::logout();
 
         $user->delete();
@@ -102,5 +132,16 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/')->with('success', 'Cuenta eliminada correctamente.');
+    }
+
+    /**
+     * Extraer el public_id de una URL de Cloudinary
+     */
+    private function getCloudinaryPublicId($url)
+    {
+        if (preg_match('/upload\/(?:v\d+\/)?(.+)\.[a-z]+$/i', $url, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 }

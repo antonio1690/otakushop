@@ -1,15 +1,17 @@
 {{-- resources/views/partials/product-card.blade.php --}}
+@php
+    $imageUrl = $product->getImageUrl();
+@endphp
 <div class="col-md-6 col-lg-4">
     <div class="card product-card h-100">
         <div class="position-relative overflow-hidden" style="height: 280px;">
-            @if($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" 
+            @if($imageUrl)
+                <img src="{{ $imageUrl }}" 
                      class="product-image lazy-image" 
-                     data-src="{{ asset('storage/' . $product->image) }}"
                      alt="{{ $product->name }}"
                      loading="lazy"
                      onerror="this.src='https://via.placeholder.com/400x280/667eea/ffffff?text={{ urlencode($product->category->name) }}'"
-                     onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                     onclick="showImageModal('{{ $imageUrl }}', '{{ $product->name }}')">
             @else
                 <div class="product-image-placeholder d-flex align-items-center justify-content-center flex-column" 
                      style="background: linear-gradient(135deg, {{ ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#fa709a'][rand(0, 4)] }} 0%, {{ ['#764ba2', '#f5576c', '#00f2fe', '#38f9d7', '#fee140'][rand(0, 4)] }} 100%);">
@@ -34,10 +36,10 @@
             @endif
 
             <!-- Botón de zoom en hover -->
-            @if($product->image)
+            @if($imageUrl)
             <div class="image-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
                  style="background: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s ease;"
-                 onclick="showImageModal('{{ asset('storage/' . $product->image) }}', '{{ $product->name }}')">
+                 onclick="showImageModal('{{ $imageUrl }}', '{{ $product->name }}')">
                 <i class="bi bi-zoom-in text-white" style="font-size: 3rem; cursor: pointer;"></i>
             </div>
             @endif

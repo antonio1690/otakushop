@@ -33,7 +33,9 @@ class Product extends Model
         'release_date' => 'date'
     ];
 
-    // Añadir método helper para obtener la imagen
+    /**
+     * Obtener la URL de la imagen (compatible con Cloudinary y local)
+     */
     public function getImageUrl()
     {
         if ($this->image_type === 'url' && $this->image_url) {
@@ -41,11 +43,17 @@ class Product extends Model
         }
     
         if ($this->image) {
+            // Si es una URL completa (Cloudinary), devolverla directamente
+            if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+                return $this->image;
+            }
+            // Si es una ruta local
             return asset('storage/' . $this->image);
         }
     
         return null;
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

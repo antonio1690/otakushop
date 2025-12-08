@@ -30,26 +30,27 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Nombre <span class="text-danger">*</span></label>
                         <input type="text" 
-                               name="name" 
-                               class="form-control" 
-                               value="{{ old('name', $franchise->name) }}"
-                               required
-                               style="border-radius: 15px;">
+                            name="name" 
+                            class="form-control" 
+                            value="{{ old('name', $franchise->name) }}"
+                            required
+                            style="border-radius: 15px;">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Descripción</label>
                         <textarea name="description" 
-                                  class="form-control" 
-                                  rows="4"
-                                  style="border-radius: 15px;">{{ old('description', $franchise->description) }}</textarea>
+                                class="form-control" 
+                                rows="4"
+                                style="border-radius: 15px;">{{ old('description', $franchise->description) }}</textarea>
                     </div>
 
                     @if($franchise->logo)
                     <div class="mb-3 text-center">
-                        <img src="{{ asset('storage/' . $franchise->logo) }}" 
-                             class="img-fluid" 
-                             style="max-height: 150px; border-radius: 15px;">
+                        <img src= "{{ $franchise->getLogoUrl() }}"
+                            alt="{{ $franchise->name }} Logo"
+                            class="img-fluid" 
+                            style="max-height: 150px; border-radius: 15px;">
                         <p class="text-muted small mt-2">Logo actual</p>
                     </div>
                     @endif
@@ -57,11 +58,11 @@
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Cambiar Logo</label>
                         <input type="file" 
-                               name="logo" 
-                               class="form-control" 
-                               accept="image/*"
-                               onchange="previewLogo(event)"
-                               style="border-radius: 15px;">
+                            name="logo" 
+                            class="form-control" 
+                            accept="image/*"
+                            onchange="previewLogo(event)"
+                            style="border-radius: 15px;">
                         <small class="text-muted">Deja vacío para mantener el logo actual</small>
                         
                         <div id="logo-preview" class="mt-3 text-center" style="display: none;">

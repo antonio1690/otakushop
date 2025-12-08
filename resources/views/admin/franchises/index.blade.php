@@ -38,12 +38,13 @@
                         <td class="fw-bold">#{{ $franchise->id }}</td>
                         <td>
                             @if($franchise->logo)
-                                <img src="{{ asset('storage/' . $franchise->logo) }}" 
-                                     class="img-thumbnail" 
-                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+                                <img src= "{{ $franchise->getLogoUrl() }}"
+                                    alt="{{ $franchise->name }} Logo"
+                                    class="img-thumbnail" 
+                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
                             @else
                                 <div class="bg-light d-flex align-items-center justify-content-center" 
-                                     style="width: 50px; height: 50px; border-radius: 10px;">
+                                    style="width: 50px; height: 50px; border-radius: 10px;">
                                     <i class="bi bi-star text-muted"></i>
                                 </div>
                             @endif
@@ -58,7 +59,7 @@
                         <td class="text-center">
                             <div class="btn-group">
                                 <a href="{{ route('admin.franchises.edit', $franchise) }}" 
-                                   class="btn btn-sm btn-outline-primary">
+                                    class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <button type="button" 

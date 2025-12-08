@@ -23,7 +23,7 @@
                     <!-- Imagen del producto -->
                     <div class="col-md-2">
                         @if($item->product->image)
-                            <img src="{{ asset('storage/' . $item->product->image) }}" 
+                            <img src="{{ $item->product->getImageUrl() }}"
                                  class="img-fluid" 
                                  style="border-radius: 15px; width: 100%; height: 80px; object-fit: cover;"
                                  alt="{{ $item->product->name }}">

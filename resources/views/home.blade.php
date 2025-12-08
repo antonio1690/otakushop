@@ -130,7 +130,7 @@
                 <div class="card product-card h-100">
                     <div class="position-relative overflow-hidden" style="height: 280px;">
                         @if($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" 
+                            <img src="{{ $product->getImageUrl() }}"
                                  class="product-image" 
                                  alt="{{ $product->name }}">
                         @else

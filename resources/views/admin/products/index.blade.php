@@ -69,11 +69,14 @@
                 </thead>
                 <tbody>
                     @forelse($products as $product)
+                    @php
+                        $imageUrl = $product->getImageUrl();
+                    @endphp
                     <tr>
                         <td class="fw-bold">#{{ $product->id }}</td>
                         <td>
-                            @if($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" 
+                            @if($imageUrl)
+                                <img src="{{ $imageUrl }}" 
                                      class="img-thumbnail" 
                                      style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
                                      alt="{{ $product->name }}">

@@ -22,13 +22,13 @@
                 <!-- Avatar -->
                 <div class="position-relative d-inline-block mb-3">
                     @if($user->avatar)
-                        <img src="{{ str_contains($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" 
-                             alt="Avatar" 
-                             class="rounded-circle" 
-                             style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--primary-color); box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);">
+                        <img src="{{ \App\Helpers\ImageHelper::getImageUrl($user->avatar) }}" 
+                            alt="Avatar"
+                            class="rounded-circle"
+                            style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--primary-color); box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);">
                     @else
                         <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                             style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; font-size: 3rem; font-weight: bold; border: 4px solid white; box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);">
+                            style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; font-size: 3rem; font-weight: bold; border: 4px solid white; box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);">
                             {{ substr($user->name, 0, 1) }}
                         </div>
                     @endif
@@ -326,21 +326,21 @@
                     @csrf
                     
                     <div class="text-center mb-3">
-                        <img id="avatarPreview" 
-                             src="{{ $user->avatar ? (str_contains($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar)) : asset('images/default-avatar.png') }}" 
-                             class="rounded-circle mb-3" 
-                             style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--primary-color);">
+                        <img id="avatarPreview"
+                            src="{{ $user->avatar ? \App\Helpers\ImageHelper::getImageUrl($user->avatar) : asset('images/default-avatar.png') }}"
+                            class="rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--primary-color);">
                     </div>
 
                     <div class="mb-3">
                         <label for="avatar" class="form-label fw-semibold">Selecciona una imagen</label>
                         <input type="file" 
-                               id="avatar" 
-                               name="avatar" 
-                               class="form-control" 
-                               accept="image/*"
-                               onchange="previewAvatar(this)"
-                               style="border-radius: 15px;">
+                            id="avatar" 
+                            name="avatar" 
+                            class="form-control" 
+                            accept="image/*"
+                            onchange="previewAvatar(this)"
+                            style="border-radius: 15px;">
                         <small class="text-muted">JPG, PNG o GIF. Máximo 2MB</small>
                     </div>
 
@@ -373,11 +373,11 @@
                     <div class="mb-3">
                         <label for="password" class="form-label fw-semibold">Confirma tu contraseña</label>
                         <input type="password" 
-                               id="password" 
-                               name="password" 
-                               class="form-control @error('password', 'userDeletion') is-invalid @enderror" 
-                               required
-                               style="border-radius: 15px;">
+                            id="password" 
+                            name="password" 
+                            class="form-control @error('password', 'userDeletion') is-invalid @enderror" 
+                            required
+                            style="border-radius: 15px;">
                         @error('password', 'userDeletion')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

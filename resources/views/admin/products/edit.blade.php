@@ -3,6 +3,10 @@
 
 @section('title', 'Editar Producto - Admin OtakuShop')
 
+@php
+    $imageUrl = $product->getImageUrl();
+@endphp
+
 @section('admin-content')
 <div class="row mb-4">
     <div class="col-12">
@@ -141,12 +145,15 @@
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-4">Imagen del Producto</h5>
 
-                    @if($product->image)
+                    @if($imageUrl)
                         <div class="mb-3 text-center">
-                            <img src="{{ asset('storage/' . $product->image) }}" 
+                            <img src="{{ $imageUrl }}" 
                                  class="img-fluid" 
                                  style="max-height: 250px; border-radius: 15px;">
                             <p class="text-muted small mt-2">Imagen actual</p>
+                            @if(str_contains($product->image ?? '', 'cloudinary'))
+                                <span class="badge bg-success"><i class="bi bi-cloud-check"></i> Cloudinary</span>
+                            @endif
                         </div>
                     @endif
 
@@ -158,11 +165,12 @@
                                accept="image/*"
                                onchange="previewImage(event)"
                                style="border-radius: 15px;">
-                        <small class="text-muted">Deja vacío para mantener la imagen actual</small>
+                        <small class="text-muted">Deja vacío para mantener la imagen actual. La imagen se subirá a Cloudinary.</small>
                     </div>
 
                     <div id="image-preview" class="mt-3 text-center" style="display: none;">
                         <img id="preview" src="" class="img-fluid" style="max-height: 250px; border-radius: 15px;">
+                        <p class="text-muted small mt-2">Vista previa</p>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Franchise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class FranchiseController extends Controller
 {
@@ -32,7 +33,20 @@ class FranchiseController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('franchises', 'public');
+            try {
+                $uploadedFile = Cloudinary::upload($request->file('logo')->getRealPath(), [
+                    'folder' => 'otakushop/franchises',
+                    'transformation' => [
+                        'width' => 300,
+                        'height' => 300,
+                        'crop' => 'limit',
+                        'quality' => 'auto'
+                    ]
+                ]);
+                $validated['logo'] = $uploadedFile->getSecurePath();
+            } catch (\Exception $e) {
+                return back()->with('error', 'Error al subir el logo: ' . $e->getMessage());
+            }
         }
 
         Franchise::create($validated);
@@ -55,11 +69,28 @@ class FranchiseController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            // Eliminar logo anterior si existe
-            if ($franchise->logo) {
-                Storage::disk('public')->delete($franchise->logo);
+            try {
+                // Eliminar logo anterior de Cloudinary si existe
+                if ($franchise->logo && str_contains($franchise->logo, 'cloudinary')) {
+                    $publicId = $this->getCloudinaryPublicId($franchise->logo);
+                    if ($publicId) {
+                        Cloudinary::destroy($publicId);
+                    }
+                }
+
+                $uploadedFile = Cloudinary::upload($request->file('logo')->getRealPath(), [
+                    'folder' => 'otakushop/franchises',
+                    'transformation' => [
+                        'width' => 300,
+                        'height' => 300,
+                        'crop' => 'limit',
+                        'quality' => 'auto'
+                    ]
+                ]);
+                $validated['logo'] = $uploadedFile->getSecurePath();
+            } catch (\Exception $e) {
+                return back()->with('error', 'Error al subir el logo: ' . $e->getMessage());
             }
-            $validated['logo'] = $request->file('logo')->store('franchises', 'public');
         }
 
         $franchise->update($validated);
@@ -75,14 +106,32 @@ class FranchiseController extends Controller
             return back()->with('error', 'No se puede eliminar una franquicia con productos asociados.');
         }
 
-        // Eliminar logo si existe
-        if ($franchise->logo) {
-            Storage::disk('public')->delete($franchise->logo);
+        // Eliminar logo de Cloudinary si existe
+        if ($franchise->logo && str_contains($franchise->logo, 'cloudinary')) {
+            try {
+                $publicId = $this->getCloudinaryPublicId($franchise->logo);
+                if ($publicId) {
+                    Cloudinary::destroy($publicId);
+                }
+            } catch (\Exception $e) {
+                // Continuar aunque falle
+            }
         }
 
         $franchise->delete();
 
         return redirect()->route('admin.franchises.index')
             ->with('success', 'Franquicia eliminada exitosamente.');
+    }
+
+    /**
+     * Extraer el public_id de una URL de Cloudinary
+     */
+    private function getCloudinaryPublicId($url)
+    {
+        if (preg_match('/upload\/(?:v\d+\/)?(.+)\.[a-z]+$/i', $url, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 }

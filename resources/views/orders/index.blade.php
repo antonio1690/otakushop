@@ -62,7 +62,7 @@
                     <div class="col-md-4">
                         <div class="d-flex align-items-center">
                             @if($item->product->image)
-                                <img src="{{ asset('storage/' . $item->product->image) }}" 
+                                <img src="{{ $item->product->getImageUrl() }}"
                                      class="me-3" 
                                      style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
                                      alt="{{ $item->product->name }}">
